@@ -11,7 +11,7 @@ const products = [
     type: "tenis", // Tipo usado nos filtros
     price: 399.90, // Preço do produto
     badge: "NOVO", // Etiqueta exibida no card
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85"
+    image: "https://70726f73706f7274.ultracdn.net/wp-content/uploads/2024/12/prosport.md-adidasi-nike-air-max-plus-drift-all-day-fd4290-003-1-2026-07-28_18-53-39_361215.webp"
   },
 
   {
@@ -19,7 +19,7 @@ const products = [
     name: "DZ Urban Silver",
     category: "Tênis",
     type: "tenis",
-    price: 459.90,
+    price: 380,
     badge: "DROP",
     image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=900&q=85"
   },
@@ -31,7 +31,7 @@ const products = [
     type: "tenis",
     price: 349.90,
     badge: "BEST",
-    image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=900&q=85"
+    image: "https://instagram.fcgh3-1.fna.fbcdn.net/v/t51.82787-15/796515264_18110163670942596_819534105545186922_n.webp?_nc_cat=102&_nc_map=urlgen_bucketless&ig_cache_key=Mzk5MDYyNjA4NjU4MzM0NjQ2Mg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTA4MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=4Asodc-MxScQ7kNvwEk0Fbe&_nc_oc=Adoi-44oVyY9u4DOr4lkCa1z6lpFYcAZ1uoTIpYzu7-ogeD8-l5wO8I9g7LCaiGnXh0&_nc_zt=23&_nc_ht=instagram.fcgh3-1.fna&_nc_gid=L-HzDUKfJLzcOuckbVFgMA&_nc_ss=7baaf&oh=00_AQP57HDjiaULrhFEsRASicGeqaXPUN5r21C9xQz1iwpObA&oe=6AC98C2C"
   },
 
   {
@@ -41,7 +41,7 @@ const products = [
     type: "tenis",
     price: 299.90,
     badge: "",
-    image: "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=900&q=85"
+    image: "https://instagram.fcgh3-1.fna.fbcdn.net/v/t51.82787-15/830612421_18113950576942596_2379521277278769774_n.webp?_nc_cat=101&_nc_map=urlgen_bucketless&ig_cache_key=Mzk5ODU5MzczODMyMDcxNjA3OA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=f6sEfoMF1OAQ7kNvwEbtIws&_nc_oc=AdpnX3Tg1aKEqB_iLdFWrbgbWwWbhtuBQGiwaAWO36YU0rT_aBTTFSrYahdBVxpMOmU&_nc_zt=23&_nc_ht=instagram.fcgh3-1.fna&_nc_gid=9u1SdJlIkkljmFK-u2pkYg&_nc_ss=7baaf&oh=00_AQO0oAnIQNIj_GnsZszn1-RfMrqxerJPGjBxH2pbZs6IGg&oe=6AC9951B"
   },
 
   {
@@ -49,9 +49,9 @@ const products = [
     name: "Oversized DZ Logo",
     category: "Camiseta",
     type: "roupas",
-    price: 119.90,
+    price: 140,
     badge: "NOVO",
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85"
+    image: "https://instagram.fcgh3-2.fna.fbcdn.net/v/t51.82787-15/816087438_18110164327942596_2701952240107308018_n.webp?_nc_cat=106&_nc_map=urlgen_bucketless&ig_cache_key=Mzk5MDYyODE2MTMyMDk3OTkyOQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTA4MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=toLbQlGt52gQ7kNvwEJzuKl&_nc_oc=Adq0zjLvytnQWq8lI4PtU3y1JHOr3RwIsSRg7wxhHecYzMe-nmWBYuVWHcrp6Qgfg3M&_nc_zt=23&_nc_ht=instagram.fcgh3-2.fna&_nc_gid=L-HzDUKfJLzcOuckbVFgMA&_nc_ss=7baaf&oh=00_AQNVpFvxZHNjy5HEmhY_GAWMbvcnWuKA4JISBgnS-aSakw&oe=6AC99130"
   },
 
   {
@@ -59,19 +59,19 @@ const products = [
     name: "Moletom Drop Zone",
     category: "Moletom",
     type: "roupas",
-    price: 219.90,
+    price: 115,
     badge: "DROP",
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=900&q=85"
+    image: "https://instagram.fcgh3-1.fna.fbcdn.net/v/t51.82787-15/830927387_18113598946942596_451909061117769719_n.webp?_nc_cat=109&_nc_map=urlgen_bucketless&ig_cache_key=Mzk5NzkyNjg5OTcxMDE4OTAzMg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTA4MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=wICDsOlkNDUQ7kNvwEVS5t-&_nc_oc=Adpiva7cvCei99Ywr-Wt6Gu-xnCn-oCqy2RWPznZHTn3tlg-1rI44IQmaOwzplD1LnU&_nc_zt=23&_nc_ht=instagram.fcgh3-1.fna&_nc_gid=9u1SdJlIkkljmFK-u2pkYg&_nc_ss=7baaf&oh=00_AQPnBKe8Y7_IAI1awPUpuE0UXLc2vWFJEuKec56PYzb2RA&oe=6AC97D19"
   },
 
   {
     id: 7,
-    name: "Cargo DZ Utility",
+    name: "Polo Ralph Lauren Paris",
     category: "Calça",
     type: "roupas",
-    price: 189.90,
+    price: 85,
     badge: "",
-    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=85"
+    image: "https://instagram.fcgh3-1.fna.fbcdn.net/v/t51.82787-15/817531761_18109937134942596_2590685050005266253_n.webp?_nc_cat=100&_nc_map=urlgen_bucketless&ig_cache_key=Mzk5MDE2NzU0NjExODk4OTg0Nw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTA4MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=oZAvipQRJ3IQ7kNvwEStABl&_nc_oc=Ado-lnGmQomovBQfb0hScrwpfCj7z7GCH_VNzn1T_3sIHk95-95lL3CbrTHA2fQo2ME&_nc_zt=23&_nc_ht=instagram.fcgh3-1.fna&_nc_gid=L-HzDUKfJLzcOuckbVFgMA&_nc_ss=7baaf&oh=00_AQPIyi3Qr7iAOptcqDAD6_bCxdGqSCjyEZPVK3JvuAe5tg&oe=6AC9744D"
   },
 
   {
@@ -81,7 +81,7 @@ const products = [
     type: "roupas",
     price: 99.90,
     badge: "BEST",
-    image: "https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=900&q=85"
+    image: "https://instagram.fcgh3-2.fna.fbcdn.net/v/t51.82787-15/825352143_18113598925942596_5317596347533891602_n.webp?_nc_cat=107&_nc_map=urlgen_bucketless&ig_cache_key=Mzk5NzkyNjg5ODU1MjU4NTI0Mg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTA4MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=5ON4dpNoYcAQ7kNvwGFP3BZ&_nc_oc=Adp7i6eiuFWk35L0y1OFmDq_hnoVTubSFHU1P0X2FwnMxOfbOM0C_kC0oJrNndxwmLg&_nc_zt=23&_nc_ht=instagram.fcgh3-2.fna&_nc_gid=9u1SdJlIkkljmFK-u2pkYg&_nc_ss=7baaf&oh=00_AQPwa20CqDwJoKst1pJIVxkbQxKNw1EgiPmdeLZpGkTZUQ&oe=6AC97435"
   }
 ];
 
