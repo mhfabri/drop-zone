@@ -1,0 +1,1631 @@
+/* =========================================================
+   VARIÁVEIS DE CORES
+   ========================================================= */
+
+:root { 
+  --green: #45ff00;              /* Verde principal da Drop Zone */
+  --green-dark: #17c700;         /* Verde mais escuro */
+  --silver: #b9bec4;             /* Prata */
+  --silver-light: #eef1f3;       /* Prata mais clara */
+  --black: #050505;              /* Preto principal */
+  --black-2: #0c0e0d;            /* Preto secundário */
+  --black-3: #141715;            /* Preto mais claro */
+  --border: rgba(185,190,196,.18); /* Cor das bordas */
+  --muted: #929893;              /* Cinza para textos secundários */
+  --white: #f7f8f7;              /* Branco principal */
+}
+
+
+/* =========================================================
+   CONFIGURAÇÕES GERAIS
+   ========================================================= */
+
+/* Faz com que padding e bordas sejam incluídos no tamanho
+   total dos elementos */
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+/* Ativa rolagem suave ao clicar nos links do menu */
+html { 
+  scroll-behavior: smooth; 
+}
+
+/* Configurações gerais da página */
+body {
+  font-family: Inter, Arial, sans-serif; /* Fonte principal */
+  background: var(--black);               /* Fundo preto */
+  color: var(--white);                    /* Texto branco */
+  overflow-x: hidden;                    /* Evita rolagem horizontal */
+}
+
+/* Remove o sublinhado dos links */
+a { 
+  color: inherit; 
+  text-decoration: none; 
+}
+
+/* Faz botões e inputs utilizarem a mesma fonte da página */
+button, input { 
+  font: inherit; 
+}
+
+
+/* =========================================================
+   BARRA SUPERIOR
+   ========================================================= */
+
+/* Barra verde que aparece no topo do site */
+.topbar {
+  background: var(--green);
+  color: #000;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  padding: 9px 15px;
+}
+
+
+/* =========================================================
+   CABEÇALHO / MENU
+   ========================================================= */
+
+.header {
+  height: 86px;
+
+  /* Coloca logo, menu e botões lado a lado */
+  display: flex;
+
+  /* Centraliza verticalmente */
+  align-items: center;
+
+  /* Distribui os elementos horizontalmente */
+  justify-content: space-between;
+
+  /* Espaçamento lateral */
+  padding: 0 5vw;
+
+  /* Linha inferior */
+  border-bottom: 1px solid var(--border);
+
+  /* Fundo preto com transparência */
+  background: rgba(5,5,5,.94);
+
+  /* Efeito de desfoque atrás do cabeçalho */
+  backdrop-filter: blur(16px);
+
+  /* Mantém o cabeçalho preso ao topo */
+  position: sticky;
+  top: 0;
+
+  /* Faz o menu ficar acima dos outros elementos */
+  z-index: 30;
+}
+
+
+/* Logo da Drop Zone */
+.brand img {
+  width: 105px;
+  height: 68px;
+
+  /* Mantém a proporção da imagem */
+  object-fit: contain;
+
+  /* Ajuda a integrar o logo ao fundo preto */
+  mix-blend-mode: screen;
+}
+
+
+/* Área dos links do menu */
+.nav {
+  display: flex;
+  gap: 34px;
+}
+
+
+/* Links do menu */
+.nav a {
+  color: #d8dcda;
+  font-size: 12px;
+  font-weight: 700;
+
+  /* Transforma o texto em letras maiúsculas */
+  text-transform: uppercase;
+
+  /* Espaçamento entre letras */
+  letter-spacing: 1.2px;
+
+  /* Animação */
+  transition: .2s;
+}
+
+
+/* Quando o mouse passa pelo link */
+.nav a:hover {
+  color: var(--green);
+}
+
+
+/* Área dos botões do cabeçalho */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* Botões de pesquisa, carrinho e menu */
+.icon-btn, .menu-btn {
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid var(--border);
+  background: var(--black-2);
+  color: var(--white);
+
+  /* Deixa o botão redondo */
+  border-radius: 50%;
+
+  cursor: pointer;
+}
+
+
+/* Efeito quando passa o mouse nos botões */
+.icon-btn:hover, .menu-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+
+/* Configuração específica do botão do carrinho */
+.cart-btn {
+  position: relative;
+  font-size: 16px;
+}
+
+
+/* Número de produtos dentro do carrinho */
+#cartCount {
+  position: absolute;
+
+  /* Posicionamento no canto superior direito */
+  top: -3px;
+  right: -2px;
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+
+  /* Centraliza o número */
+  display: grid;
+  place-items: center;
+
+  /* Formato arredondado */
+  border-radius: 99px;
+
+  background: var(--green);
+  color: #000;
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+
+/* Botão do menu mobile fica escondido no computador */
+.menu-btn {
+  display: none;
+}
+
+
+/* =========================================================
+   CAMPO DE PESQUISA
+   ========================================================= */
+
+.search-panel {
+  position: fixed;
+
+  /* Posicionamento */
+  right: 5vw;
+  top: 96px;
+
+  /* Fica acima do conteúdo */
+  z-index: 29;
+
+  width: min(420px, 90vw);
+  padding: 12px;
+
+  background: #101211;
+  border: 1px solid var(--border);
+
+  /* Começa um pouco acima */
+  transform: translateY(-20px);
+
+  /* Começa invisível */
+  opacity: 0;
+
+  /* Não permite clicar enquanto fechado */
+  pointer-events: none;
+
+  transition: .25s;
+}
+
+
+/* Quando a pesquisa recebe a classe "open",
+   ela aparece */
+.search-panel.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* Campo de texto da pesquisa */
+.search-panel input {
+  width: 100%;
+
+  border: 1px solid var(--border);
+  background: #050605;
+  color: #fff;
+
+  padding: 14px 16px;
+
+  /* Remove a borda padrão do navegador */
+  outline: none;
+}
+
+
+/* Borda verde quando o campo está selecionado */
+.search-panel input:focus {
+  border-color: var(--green);
+}
+
+
+/* =========================================================
+   HERO / BANNER PRINCIPAL
+   ========================================================= */
+
+.hero {
+  min-height: 650px;
+
+  /* Espaçamento interno */
+  padding: 90px 8vw;
+
+  /* Divide o banner em duas colunas */
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+
+  /* Centraliza verticalmente */
+  align-items: center;
+
+  gap: 40px;
+
+  position: relative;
+
+  /* Esconde elementos que ultrapassarem o banner */
+  overflow: hidden;
+
+  /* Fundo com brilho verde */
+  background:
+    radial-gradient(
+      circle at 78% 48%, 
+      rgba(69,255,0,.10), 
+      transparent 31%
+    ),
+    linear-gradient(
+      135deg, 
+      #050605 0%, 
+      #090c0a 55%, 
+      #050505 100%
+    );
+}
+
+
+/* "DZ" gigante no fundo do banner */
+.hero::before {
+  content: "DZ";
+
+  position: absolute;
+  right: -3vw;
+  bottom: -120px;
+
+  font-family: Orbitron, sans-serif;
+  font-size: 38vw;
+  line-height: 1;
+  font-weight: 800;
+
+  /* Quase transparente */
+  color: rgba(255,255,255,.015);
+}
+
+
+/* =========================================================
+   PEQUENOS TÍTULOS VERDES
+   ========================================================= */
+
+.eyebrow {
+  color: var(--green);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  /* Espaçamento maior entre as letras */
+  letter-spacing: 2.5px;
+}
+
+
+/* =========================================================
+   TÍTULO PRINCIPAL DO HERO
+   ========================================================= */
+
+.hero h1 {
+  font-family: Orbitron, Inter, sans-serif;
+
+  /* O tamanho se adapta à tela */
+  font-size: clamp(45px, 6.4vw, 88px);
+
+  line-height: .96;
+
+  margin: 18px 0 25px;
+
+  letter-spacing: -3px;
+}
+
+
+/* Parte verde do título */
+.hero h1 span {
+  color: var(--green);
+
+  /* Brilho verde */
+  text-shadow: 0 0 30px rgba(69,255,0,.2);
+}
+
+
+/* Texto abaixo do título */
+.hero p {
+  max-width: 550px;
+
+  color: var(--muted);
+
+  line-height: 1.75;
+  font-size: 15px;
+}
+
+
+/* Área dos botões do Hero */
+.hero-actions {
+  display: flex;
+
+  /* Permite quebrar os botões em telas pequenas */
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-top: 32px;
+}
+
+
+/* =========================================================
+   BOTÕES
+   ========================================================= */
+
+.btn {
+  display: inline-flex;
+
+  /* Centraliza conteúdo */
+  align-items: center;
+  justify-content: center;
+
+  min-height: 48px;
+  padding: 0 22px;
+
+  border: 1px solid transparent;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  letter-spacing: 1.5px;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+
+/* Botão verde */
+.btn-primary {
+  background: var(--green);
+  color: #000;
+}
+
+
+/* Efeito hover do botão verde */
+.btn-primary:hover {
+  background: #83ff55;
+
+  /* Sobe levemente */
+  transform: translateY(-2px);
+
+  /* Brilho */
+  box-shadow: 0 8px 28px rgba(69,255,0,.18);
+}
+
+
+/* Botão transparente */
+.btn-outline {
+  border-color: #4c514e;
+  color: #fff;
+}
+
+
+/* Hover do botão transparente */
+.btn-outline:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+
+/* =========================================================
+   ARTE DO HERO
+   ========================================================= */
+
+.hero-art {
+  height: 480px;
+
+  position: relative;
+
+  /* Centraliza o conteúdo */
+  display: grid;
+  place-items: center;
+}
+
+
+/* Brilho verde atrás do elemento */
+.glow {
+  width: 320px;
+  height: 320px;
+
+  border-radius: 50%;
+
+  background: rgba(69,255,0,.09);
+
+  /* Deixa o brilho difuso */
+  filter: blur(55px);
+
+  position: absolute;
+}
+
+
+/* Anel verde */
+.hero-ring {
+  width: 370px;
+  height: 150px;
+
+  border: 2px solid rgba(69,255,0,.75);
+
+  border-radius: 50%;
+
+  /* Inclina o anel */
+  transform: rotate(-16deg);
+
+  /* Brilho */
+  box-shadow: 0 0 25px rgba(69,255,0,.2);
+}
+
+
+/* Segundo anel interno */
+.hero-ring::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 12px -8px;
+
+  border: 1px solid rgba(69,255,0,.35);
+
+  border-radius: 50%;
+}
+
+
+/* Cartão central do Hero */
+.hero-card {
+  position: absolute;
+
+  width: 230px;
+  height: 290px;
+
+  /* Centraliza os textos */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* Fundo escuro */
+  background: linear-gradient(
+    145deg, 
+    rgba(35,39,37,.95), 
+    rgba(7,8,8,.96)
+  );
+
+  border: 1px solid rgba(185,190,196,.25);
+
+  /* Inclina o cartão */
+  transform: rotate(-8deg);
+
+  /* Sombra */
+  box-shadow: 20px 30px 70px #000;
+}
+
+
+/* Borda interna do cartão */
+.hero-card::after {
+  content: "";
+
+  position: absolute;
+  inset: 9px;
+
+  border: 1px solid rgba(69,255,0,.22);
+}
+
+
+/* Texto "NEW DROP" */
+.hero-card small {
+  color: var(--green);
+  letter-spacing: 3px;
+  font-size: 9px;
+}
+
+
+/* DZ dentro do cartão */
+.hero-card strong {
+  font-family: Orbitron;
+  font-size: 66px;
+
+  color: var(--silver-light);
+
+  margin: 12px 0;
+}
+
+
+/* Texto inferior do cartão */
+.hero-card span {
+  color: var(--silver);
+
+  font-size: 9px;
+
+  letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   FAIXA VERDE / TICKER
+   ========================================================= */
+
+.ticker {
+  height: 55px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 25px;
+
+  overflow: hidden;
+
+  background: var(--green);
+  color: #000;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+
+/* Símbolo entre os textos */
+.ticker b {
+  font-size: 16px;
+}
+
+
+/* =========================================================
+   SEÇÕES
+   ========================================================= */
+
+.section {
+  padding: 95px 7vw;
+}
+
+
+/* Cabeçalho das seções */
+.section-heading {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: end;
+
+  gap: 30px;
+
+  margin-bottom: 42px;
+}
+
+
+/* Títulos das seções */
+.section-heading h2,
+.about h2,
+.promo h2 {
+
+  font-family: Orbitron, sans-serif;
+
+  /* Tamanho responsivo */
+  font-size: clamp(30px, 4vw, 54px);
+
+  letter-spacing: -2px;
+
+  margin-top: 10px;
+}
+
+
+/* Cabeçalho simples */
+.section-heading.simple {
+  align-items: end;
+}
+
+
+/* Texto auxiliar */
+.section-heading.simple > p {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
+.filters {
+  display: flex;
+  gap: 7px;
+
+  /* Permite quebrar os botões */
+  flex-wrap: wrap;
+}
+
+
+/* Botão de filtro */
+.filter {
+  border: 1px solid var(--border);
+
+  background: transparent;
+
+  color: var(--muted);
+
+  padding: 10px 15px;
+
+  cursor: pointer;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+
+/* Filtro quando passa o mouse
+   ou quando está selecionado */
+.filter:hover,
+.filter.active {
+  background: var(--green);
+  color: #000;
+
+  border-color: var(--green);
+}
+
+
+/* =========================================================
+   GRID DE PRODUTOS
+   ========================================================= */
+
+.products {
+  display: grid;
+
+  /* 4 produtos por linha */
+  grid-template-columns: repeat(4, minmax(0,1fr));
+
+  gap: 18px;
+}
+
+
+/* Card individual do produto */
+.product-card {
+  background: #0b0d0c;
+
+  border: 1px solid var(--border);
+
+  transition: .25s;
+
+  overflow: hidden;
+
+  position: relative;
+}
+
+
+/* Efeito quando passa o mouse */
+.product-card:hover {
+  border-color: rgba(69,255,0,.45);
+
+  /* Levanta o card */
+  transform: translateY(-5px);
+}
+
+
+/* =========================================================
+   IMAGEM DO PRODUTO
+   ========================================================= */
+
+.product-image {
+  height: 310px;
+
+  overflow: hidden;
+
+  position: relative;
+
+  background: #171a18;
+}
+
+
+/* Imagem do produto */
+.product-image img {
+  width: 100%;
+  height: 100%;
+
+  /* Faz a imagem preencher o espaço */
+  object-fit: cover;
+
+  display: block;
+
+  transition: .45s;
+}
+
+
+/* Aumenta a imagem quando passa o mouse */
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+
+/* =========================================================
+   ETIQUETA DO PRODUTO
+   ========================================================= */
+
+.badge {
+  position: absolute;
+
+  left: 12px;
+  top: 12px;
+
+  background: var(--green);
+  color: #000;
+
+  padding: 6px 9px;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   BOTÃO FAVORITO
+   ========================================================= */
+
+.heart {
+  position: absolute;
+
+  right: 12px;
+  top: 12px;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255,255,255,.2);
+
+  background: rgba(0,0,0,.55);
+
+  color: #fff;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   INFORMAÇÕES DO PRODUTO
+   ========================================================= */
+
+.product-info {
+  padding: 17px;
+}
+
+
+/* Categoria do produto */
+.product-category {
+  color: var(--green);
+
+  font-size: 8px;
+
+  font-weight: 900;
+
+  letter-spacing: 1.8px;
+}
+
+
+/* Nome do produto */
+.product-name {
+  margin: 7px 0 13px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+/* Linha que contém preço e botão */
+.product-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+/* Preço */
+.price {
+  font-size: 16px;
+
+  font-weight: 800;
+
+  color: var(--silver-light);
+}
+
+
+/* Botão "+" */
+.add {
+  width: 37px;
+  height: 37px;
+
+  border: 1px solid #3e4541;
+
+  background: transparent;
+
+  color: var(--green);
+
+  cursor: pointer;
+
+  font-size: 20px;
+}
+
+
+/* Hover do botão "+" */
+.add:hover {
+  background: var(--green);
+  color: #000;
+}
+
+
+/* =========================================================
+   BANNER PROMOCIONAL
+   ========================================================= */
+
+.promo {
+  margin: 20px 7vw 70px;
+
+  min-height: 300px;
+
+  padding: 50px 60px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  border: 1px solid rgba(69,255,0,.35);
+
+  /* Fundo com brilho verde */
+  background:
+    radial-gradient(
+      circle at 80% 50%, 
+      rgba(69,255,0,.18), 
+      transparent 27%
+    ),
+    linear-gradient(
+      120deg, 
+      #101311, 
+      #080908
+    );
+}
+
+
+/* Texto do banner promocional */
+.promo p {
+  color: var(--muted);
+
+  margin-top: 15px;
+
+  max-width: 520px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   SEÇÃO SOBRE
+   ========================================================= */
+
+.about {
+  margin: 20px 7vw 100px;
+
+  padding: 70px 7vw;
+
+  display: grid;
+
+  /* Coluna pequena para o DZ e maior para o texto */
+  grid-template-columns: .5fr 1.5fr;
+
+  gap: 60px;
+
+  align-items: center;
+
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+
+/* DZ grande da seção Sobre */
+.about-mark {
+  font-family: Orbitron;
+
+  font-size: clamp(100px, 17vw, 220px);
+
+  font-weight: 800;
+
+  /* Deixa o interior transparente */
+  color: transparent;
+
+  /* Cria contorno verde */
+  -webkit-text-stroke: 2px rgba(69,255,0,.7);
+}
+
+
+/* Texto da seção Sobre */
+.about p {
+  max-width: 720px;
+
+  margin-top: 22px;
+
+  color: var(--muted);
+
+  line-height: 1.9;
+}
+
+
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+
+footer {
+  padding: 70px 7vw 30px;
+
+  border-top: 1px solid var(--border);
+
+  display: grid;
+
+  /* 4 colunas */
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+
+  gap: 40px;
+
+  color: var(--muted);
+}
+
+
+/* Logo do rodapé */
+.footer-brand img {
+  width: 130px;
+  height: 80px;
+
+  object-fit: contain;
+
+  mix-blend-mode: screen;
+}
+
+
+/* Texto ao lado/abaixo da logo */
+.footer-brand p {
+  max-width: 280px;
+
+  font-size: 12px;
+
+  line-height: 1.7;
+}
+
+
+/* Títulos das colunas */
+footer h4 {
+  color: #fff;
+
+  font-size: 10px;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 16px;
+}
+
+
+/* Links e textos do rodapé */
+footer a,
+footer p {
+  display: block;
+
+  font-size: 11px;
+
+  line-height: 2.2;
+}
+
+
+/* Efeito nos links */
+footer a:hover {
+  color: var(--green);
+}
+
+
+/* Copyright */
+.copyright {
+  grid-column: 1 / -1;
+
+  border-top: 1px solid var(--border);
+
+  padding-top: 22px;
+
+  font-size: 10px;
+
+  letter-spacing: .5px;
+}
+
+
+/* =========================================================
+   CARRINHO LATERAL
+   ========================================================= */
+
+.cart {
+  position: fixed;
+
+  z-index: 50;
+
+  top: 0;
+  right: 0;
+
+  height: 100vh;
+
+  /* No máximo 430px, mas pode ocupar a tela inteira
+     em dispositivos pequenos */
+  width: min(430px, 100%);
+
+  background: #0a0c0b;
+
+  border-left: 1px solid var(--border);
+
+  /* Começa fora da tela */
+  transform: translateX(105%);
+
+  transition: .3s;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+/* Quando o carrinho recebe "open",
+   ele entra na tela */
+.cart.open {
+  transform: translateX(0);
+}
+
+
+/* Cabeçalho do carrinho */
+.cart-head {
+  padding: 25px;
+
+  border-bottom: 1px solid var(--border);
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+
+/* Título do carrinho */
+.cart-head h3 {
+  font-family: Orbitron;
+  font-size: 17px;
+}
+
+
+/* Botão X para fechar */
+.cart-head button {
+  background: transparent;
+
+  border: 0;
+
+  color: #fff;
+
+  font-size: 30px;
+
+  cursor: pointer;
+}
+
+
+/* Área dos produtos */
+.cart-items {
+  padding: 20px;
+
+  /* Permite rolagem */
+  overflow-y: auto;
+
+  /* Ocupa o espaço disponível */
+  flex: 1;
+}
+
+
+/* Mensagem quando o carrinho está vazio */
+.empty {
+  text-align: center;
+
+  color: var(--muted);
+
+  margin-top: 80px;
+
+  font-size: 13px;
+}
+
+
+/* Cada produto dentro do carrinho */
+.cart-item {
+  display: grid;
+
+  /* Imagem | informações | botão remover */
+  grid-template-columns: 70px 1fr auto;
+
+  gap: 12px;
+
+  align-items: center;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid var(--border);
+}
+
+
+/* Imagem do produto no carrinho */
+.cart-item img {
+  width: 70px;
+  height: 75px;
+
+  object-fit: cover;
+}
+
+
+/* Nome do produto */
+.cart-item h4 {
+  font-size: 12px;
+
+  margin-bottom: 7px;
+}
+
+
+/* Preço/quantidade */
+.cart-item p {
+  color: var(--green);
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+/* Botão para remover produto */
+.remove {
+  background: none;
+
+  border: 0;
+
+  color: #777;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   PARTE INFERIOR DO CARRINHO
+   ========================================================= */
+
+.cart-bottom {
+  padding: 22px;
+
+  border-top: 1px solid var(--border);
+}
+
+
+/* Linha que mostra o total */
+.cart-bottom > div {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+
+/* Valor total */
+.cart-bottom strong {
+  color: var(--green);
+}
+
+
+/* Botão finalizar compra ocupa toda a largura */
+.checkout {
+  width: 100%;
+}
+
+
+/* Texto pequeno abaixo do botão */
+.cart-bottom small {
+  display: block;
+
+  color: #666;
+  
+  font-size: 9px;
+
+  line-height: 1.5;
+
+  margin-top: 12px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   FUNDO ESCURO ATRÁS DO CARRINHO
+   ========================================================= */
+
+.overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0,0,0,.65);
+
+  z-index: 45;
+
+  /* Inicialmente invisível */
+  opacity: 0;
+
+  /* Não permite clicar */
+  pointer-events: none;
+
+  transition: .3s;
+}
+
+
+/* Quando o carrinho está aberto */
+.overlay.open {
+  opacity: 1;
+
+  /* Permite clicar para fechar */
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   NOTIFICAÇÃO / TOAST
+   ========================================================= */
+
+.toast {
+  position: fixed;
+
+  left: 50%;
+  bottom: 25px;
+
+  z-index: 70;
+
+  /* Começa abaixo da tela */
+  transform: translate(-50%, 100px);
+
+  background: var(--green);
+
+  color: #000;
+
+  padding: 13px 20px;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  /* Invisível inicialmente */
+  opacity: 0;
+
+  transition: .3s;
+}
+
+
+/* Toast quando aparece */
+.toast.show {
+  transform: translate(-50%, 0);
+
+  opacity: 1;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE — TABLETS
+   ========================================================= */
+
+@media (max-width: 980px) {
+
+  /* Esconde o menu tradicional */
+  .nav {
+    display: none;
+  }
+
+
+  /* Mostra botão do menu */
+  .menu-btn {
+    display: block;
+  }
+
+
+  /* Menu mobile aberto */
+  .nav.open {
+    position: absolute;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0;
+
+    top: 86px;
+
+    left: 0;
+    right: 0;
+
+    background: #090a09;
+
+    border-bottom: 1px solid var(--border);
+  }
+
+
+  /* Links do menu mobile */
+  .nav.open a {
+    padding: 17px 7vw;
+
+    border-top: 1px solid var(--border);
+  }
+
+
+  /* Hero vira uma única coluna */
+  .hero {
+    grid-template-columns: 1fr;
+
+    padding-top: 65px;
+  }
+
+
+  /* Reduz a área do elemento visual */
+  .hero-art {
+    height: 320px;
+  }
+
+
+  /* Produtos passam para duas colunas */
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+  /* Rodapé passa para duas colunas */
+  footer {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE — CELULARES
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  /* Cabeçalho menor */
+  .header {
+    height: 72px;
+
+    padding: 0 20px;
+  }
+
+
+  /* Logo menor */
+  .brand img {
+    width: 90px;
+    height: 55px;
+  }
+
+
+  /* Texto da barra superior menor */
+  .topbar {
+    font-size: 8px;
+  }
+
+
+  /* Hero */
+  .hero {
+    padding: 55px 22px 45px;
+
+    min-height: auto;
+  }
+
+
+  /* Título menor */
+  .hero h1 {
+    font-size: 45px;
+
+    letter-spacing: -2px;
+  }
+
+
+  /* Área visual menor */
+  .hero-art {
+    height: 260px;
+  }
+
+
+  /* Anel menor */
+  .hero-ring {
+    width: 270px;
+    height: 110px;
+  }
+
+
+  /* Cartão menor */
+  .hero-card {
+    width: 175px;
+    height: 220px;
+  }
+
+
+  /* DZ dentro do cartão menor */
+  .hero-card strong {
+    font-size: 48px;
+  }
+
+
+  /* Espaçamento das seções */
+  .section {
+    padding: 65px 20px;
+  }
+
+
+  /* Cabeçalho da seção vira coluna */
+  .section-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  /* Cabeçalho simples continua lado a lado */
+  .section-heading.simple {
+    flex-direction: row;
+
+    align-items: end;
+  }
+
+
+  /* Esconde texto auxiliar no celular */
+  .section-heading.simple > p {
+    display: none;
+  }
+
+
+  /* Produtos ficam em duas colunas */
+  .products {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+  }
+
+
+  /* Imagem menor */
+  .product-image {
+    height: 220px;
+  }
+
+
+  /* Menos espaço interno */
+  .product-info {
+    padding: 12px;
+  }
+
+
+  /* Nome menor */
+  .product-name {
+    font-size: 12px;
+  }
+
+
+  /* Preço menor */
+  .price {
+    font-size: 13px;
+  }
+
+
+  /* Banner promocional */
+  .promo {
+    margin: 10px 20px 50px;
+
+    padding: 35px 25px;
+
+    /* Coloca os elementos um embaixo do outro */
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+
+  /* Sobre */
+  .about {
+    margin: 10px 20px 70px;
+
+    padding: 50px 0;
+
+    /* Uma coluna */
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+
+  /* DZ menor */
+  .about-mark {
+    font-size: 100px;
+  }
+
+
+  /* Rodapé */
+  footer {
+    padding: 55px 20px 25px;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 30px 20px;
+  }
+
+
+  /* A parte da marca ocupa toda a largura */
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}

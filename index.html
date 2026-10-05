@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Drop Zone — tênis, roupas e acessórios com estilo urbano.">
+  <title>Drop Zone | Streetwear & Sneakers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- <div class="topbar">FRETE GRÁTIS NAS COMPRAS ACIMA DE R$ 299 • PARCELE EM ATÉ 6X SEM JUROS</div> -->
+
+  <header class="header">
+    <a class="brand" href="#inicio" aria-label="Drop Zone">
+      <img src="img/logo.jpg" alt="Drop Zone">
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="#inicio">Início</a>
+      <a href="#tenis">Tênis</a>
+      <a href="#roupas">Roupas</a>
+      <a href="#destaques">Destaques</a>
+      <a href="#sobre">Sobre</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="searchBtn" aria-label="Pesquisar">⌕</button>
+      <button class="icon-btn cart-btn" id="cartBtn" aria-label="Carrinho">🛒<span id="cartCount">0</span></button>
+      <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+    </div>
+  </header>
+
+  <div class="search-panel" id="searchPanel">
+    <input id="searchInput" type="search" placeholder="Buscar tênis, camisetas, moletons..." autocomplete="off">
+  </div>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <span class="eyebrow">DROP ZONE • STREETWEAR</span>
+        <h1>SEU ESTILO.<br><span>SUA DROP.</span></h1>
+        <p>Explore tênis e roupas que combinam atitude, conforto e identidade. Escolha seu próximo drop.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#destaques">COMPRAR AGORA</a>
+          <a class="btn btn-outline" href="#sobre">CONHEÇA A DROP ZONE</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="glow"></div>
+        <div class="hero-ring"></div>
+        <div class="hero-card">
+          <small>NEW DROP</small>
+          <strong>DZ/01</strong>
+          <span>URBAN ESSENTIALS</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="ticker">
+      <span>NEW DROP</span><b>✦</b><span>STREET STYLE</span><b>✦</b><span>LIMITED EDITION</span><b>✦</b><span>DROP ZONE</span><b>✦</b>
+    </section>
+
+    <section class="section" id="destaques">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">SELEÇÃO DROP ZONE</span>
+          <h2>Destaques</h2>
+        </div>
+        <div class="filters">
+          <button class="filter active" data-filter="todos">Todos</button>
+          <button class="filter" data-filter="tenis">Tênis</button>
+          <button class="filter" data-filter="roupas">Roupas</button>
+        </div>
+      </div>
+      <div class="products" id="products"></div>
+    </section>
+
+    <section class="promo">
+      <div>
+        <span class="eyebrow">DROP EXCLUSIVO</span>
+        <h2>VISUAL FORTE.<br>CONFORTO REAL.</h2>
+        <p>Monte seu look com peças selecionadas para acompanhar sua rotina.</p>
+      </div>
+      <a href="#roupas" class="btn btn-primary">VER ROUPAS</a>
+    </section>
+
+    <section class="section" id="tenis">
+      <div class="section-heading simple">
+        <div>
+          <span class="eyebrow">SNEAKERS</span>
+          <h2>Tênis</h2>
+        </div>
+        <p>Modelos para completar seu estilo.</p>
+      </div>
+      <div class="products" id="shoeProducts"></div>
+    </section>
+
+    <section class="section" id="roupas">
+      <div class="section-heading simple">
+        <div>
+          <span class="eyebrow">APPAREL</span>
+          <h2>Roupas</h2>
+        </div>
+        <p>Essenciais para o seu dia a dia.</p>
+      </div>
+      <div class="products" id="clothingProducts"></div>
+    </section>
+
+    <section class="about" id="sobre">
+      <div class="about-mark">DZ</div>
+      <div>
+        <span class="eyebrow">SOBRE A DROP ZONE</span>
+        <h2>NÃO É SÓ ROUPA.<br>É IDENTIDADE.</h2>
+        <p>A Drop Zone nasceu para quem gosta de se expressar através do que veste. Uma estética urbana, peças versáteis e aquela energia de quem está sempre pronto para o próximo drop.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">
+      <img src="logo.jpg" alt="Drop Zone">
+      <p>Streetwear & sneakers para quem cria o próprio estilo.</p>
+    </div>
+    <div>
+      <h4>LOJA</h4>
+      <a href="#tenis">Tênis</a>
+      <a href="#roupas">Roupas</a>
+      <a href="#destaques">Destaques</a>
+    </div>
+    <div>
+      <h4>ATENDIMENTO</h4>
+      <a href="#">WhatsApp</a>
+      <a href="#">Instagram</a>
+      <a href="#">Trocas e devoluções</a>
+    </div>
+    <div>
+      <h4>PAGAMENTO</h4>
+      <p>PIX • Cartão • 6x sem juros</p>
+      <p>Compra segura</p>
+    </div>
+    <div class="copyright">© 2026 Drop Zone. Todos os direitos reservados.</div>
+  </footer>
+
+  <aside class="cart" id="cart">
+    <div class="cart-head">
+      <h3>Seu carrinho</h3>
+      <button id="closeCart">×</button>
+    </div>
+    <div id="cartItems" class="cart-items">
+      <p class="empty">Seu carrinho está vazio.</p>
+    </div>
+    <div class="cart-bottom">
+      <div><span>Total</span><strong id="cartTotal">R$ 0,00</strong></div>
+      <button class="btn btn-primary checkout" id="checkout">FINALIZAR PEDIDO</button>
+      <small>Demo de front-end — conecte seu gateway de pagamento para receber pedidos reais.</small>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+
+  <div class="toast" id="toast">Produto adicionado ao carrinho!</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
