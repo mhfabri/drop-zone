@@ -24,6 +24,7 @@
       <a href="#roupas">Roupas</a>
       <a href="#destaques">Destaques</a>
       <a href="#sobre">Sobre</a>
+      <a href="admin_produtos.php">Admin</a>
     </nav>
 
     <div class="header-actions">
@@ -135,6 +136,7 @@
       <a href="#">WhatsApp</a>
       <a href="https://instagram.com/drop_zonekz">Instagram</a>
       <a href="#">Trocas e devoluções</a>
+      <a href="admin_produtos.php">Painel de produtos</a>
     </div>
     <div>
       <h4>PAGAMENTO</h4>
