@@ -100,7 +100,7 @@ try {
 <body>
   <div class="wrap">
     <div class="top">
-      <h1>Painel SQL de Produtos</h1>
+      <h1>Painel de Produtos</h1>
       <div style="display:flex; gap: 10px;">
         <a href="index.php">Voltar para loja</a>
         <a href="logout.php">Sair</a>
@@ -172,7 +172,7 @@ try {
           </label>
         </div>
 
-        <button type="submit">Salvar no MySQL</button>
+        <button type="submit">Salvar</button>
       </form>
     </section>
 
