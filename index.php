@@ -1,3 +1,14 @@
+<?php
+declare(strict_types=1);
+
+session_start();
+
+$isAdmin =
+  isset($_SESSION['auth'])
+  && ($_SESSION['auth']['type'] ?? '') === 'admin';
+
+$isLoggedIn = isset($_SESSION['auth']) && is_array($_SESSION['auth']);
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -8,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <!-- <div class="topbar">FRETE GRÁTIS NAS COMPRAS ACIMA DE R$ 299 • PARCELE EM ATÉ 6X SEM JUROS</div> -->
@@ -24,7 +35,14 @@
       <a href="#roupas">Roupas</a>
       <a href="#destaques">Destaques</a>
       <a href="#sobre">Sobre</a>
-      <a href="admin_produtos.php">Admin</a>
+      <?php if ($isAdmin): ?>
+        <a href="admin_produtos.php">Admin</a>
+      <?php endif; ?>
+      <?php if ($isLoggedIn): ?>
+        <a href="logout.php">Sair</a>
+      <?php else: ?>
+        <a href="login.php">Login</a>
+      <?php endif; ?>
     </nav>
 
     <div class="header-actions">
@@ -136,7 +154,9 @@
       <a href="#">WhatsApp</a>
       <a href="https://instagram.com/drop_zonekz">Instagram</a>
       <a href="#">Trocas e devoluções</a>
-      <a href="admin_produtos.php">Painel de produtos</a>
+      <?php if ($isAdmin): ?>
+        <a href="admin_produtos.php">Painel de produtos</a>
+      <?php endif; ?>
     </div>
     <div>
       <h4>PAGAMENTO</h4>

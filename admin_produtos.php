@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
 
+session_start();
+
+if (!isset($_SESSION['auth']) || ($_SESSION['auth']['type'] ?? '') !== 'admin') {
+  header('Location: login.php');
+  exit;
+}
+
 require_once __DIR__ . '/includes/db.php';
 
 function h(?string $value): string
@@ -88,142 +95,16 @@ try {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Produtos | Drop Zone</title>
-  <style>
-    :root {
-      --bg: #0f1210;
-      --card: #181d1a;
-      --line: #2a312c;
-      --text: #ebf1ed;
-      --muted: #a4b0a8;
-      --green: #45ff00;
-      --danger: #ff6b6b;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #0b0d0c, #131914 45%, #0f1210);
-      color: var(--text);
-      padding: 24px;
-    }
-
-    .wrap {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      gap: 20px;
-    }
-
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .top a {
-      color: #000;
-      background: var(--green);
-      padding: 10px 14px;
-      text-decoration: none;
-      font-weight: 700;
-      border-radius: 8px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 18px;
-    }
-
-    h1, h2 {
-      margin: 0 0 14px;
-    }
-
-    .grid {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-
-    label {
-      display: grid;
-      gap: 6px;
-      font-weight: 700;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    input, select, textarea {
-      border: 1px solid var(--line);
-      background: #0f1311;
-      color: var(--text);
-      border-radius: 8px;
-      padding: 10px;
-      font: inherit;
-    }
-
-    textarea {
-      min-height: 88px;
-      resize: vertical;
-    }
-
-    button {
-      margin-top: 10px;
-      border: 0;
-      border-radius: 8px;
-      padding: 12px 16px;
-      font: inherit;
-      font-weight: 700;
-      cursor: pointer;
-      background: var(--green);
-      color: #000;
-    }
-
-    .ok {
-      background: rgba(69, 255, 0, 0.12);
-      border: 1px solid rgba(69, 255, 0, 0.45);
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    .errors {
-      background: rgba(255, 107, 107, 0.1);
-      border: 1px solid rgba(255, 107, 107, 0.4);
-      padding: 10px;
-      border-radius: 8px;
-      color: #ffd4d4;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-
-    th, td {
-      text-align: left;
-      border-bottom: 1px solid var(--line);
-      padding: 10px 8px;
-    }
-
-    .status-on { color: var(--green); font-weight: 700; }
-    .status-off { color: var(--danger); font-weight: 700; }
-
-    @media (max-width: 700px) {
-      body { padding: 14px; }
-      table { display: block; overflow-x: auto; white-space: nowrap; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
   <div class="wrap">
     <div class="top">
       <h1>Painel SQL de Produtos</h1>
-      <a href="index.php">Voltar para loja</a>
+      <div style="display:flex; gap: 10px;">
+        <a href="index.php">Voltar para loja</a>
+        <a href="logout.php">Sair</a>
+      </div>
     </div>
 
     <section class="card">

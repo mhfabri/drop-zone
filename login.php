@@ -1,3 +1,71 @@
+<?php
+declare(strict_types=1);
+
+session_start();
+
+require_once __DIR__ . '/includes/db.php';
+
+function h(?string $value): string
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+}
+
+$error = null;
+$success = null;
+
+if (isset($_GET['cadastro']) && $_GET['cadastro'] === 'ok') {
+    $success = 'Cadastro realizado com sucesso. Agora faca login.';
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = mb_strtolower(trim((string) ($_POST['email'] ?? '')));
+    $senha = (string) ($_POST['senha'] ?? '');
+
+    if ($email === '' || $senha === '') {
+        $error = 'Preencha e-mail e senha.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Informe um e-mail valido.';
+    } else {
+        try {
+            $pdo = getPDO();
+            $stmt = $pdo->prepare('SELECT id_cliente, nome, email, senha, admin FROM cliente WHERE email = :email LIMIT 1');
+            $stmt->execute([':email' => $email]);
+
+            $cliente = $stmt->fetch();
+
+            if (!$cliente) {
+                $error = 'Credenciais invalidas.';
+            } else {
+                $hash = (string) $cliente['senha'];
+                $senhaValida = password_verify($senha, $hash) || hash_equals($hash, $senha);
+
+                if ($senhaValida) {
+                    $isAdmin = ((int) ($cliente['admin'] ?? 0)) === 1;
+
+                    $_SESSION['auth'] = [
+                        'type' => $isAdmin ? 'admin' : 'cliente',
+                        'id' => (int) $cliente['id_cliente'],
+                        'email' => (string) $cliente['email'],
+                        'nome' => (string) $cliente['nome'],
+                    ];
+
+                    if ($isAdmin) {
+                        header('Location: admin_produtos.php');
+                        exit;
+                    }
+
+                    header('Location: index.php');
+                    exit;
+                }
+
+                $error = 'Credenciais invalidas.';
+            }
+        } catch (Throwable $e) {
+            $error = 'Nao foi possivel validar o login agora. Tente novamente.';
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -7,30 +75,20 @@
 
     <title>Login | Drop Zone</title>
 
-    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800;900&display=swap"
         rel="stylesheet">
 
-    <!-- Seu CSS principal -->
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="css/login.css">
 
 </head>
 
 <body class="login-page">
 
     <main class="login-container">
-
-        <!-- LADO DA IMAGEM -->
-        <!-- LADO DA IMAGEM -->
     <section class="login-image">
-
-        <!-- LOGO DROP ZONE -->
-        
-            
-
         <div class="login-image-overlay"></div>
 
         <div class="login-image-text">
@@ -38,16 +96,15 @@
         <div class="login-brand-tagline">
 
         <div class="login-logo">
-            
             <img src="img/logo.jpg" alt="Drop Zone">
-        </div> 
+        </div>
 
             <span>DROP ZONE • STREETWEAR</span>
 
         </div>
 
         <h1>
-            FAÇA LOGIN<br>
+            FACA LOGIN<br>
             <b>E ENTRE PARA O NOSSO TIME</b>
         </h1>
 
@@ -59,7 +116,6 @@
     </div>
     </section>
 
-        <!-- LADO DO LOGIN -->
         <section class="login-content">
 
             <div class="login-box">
@@ -80,21 +136,29 @@
 
                 </div>
 
+                <?php if ($error !== null): ?>
+                    <div class="auth-message auth-error"><?= h($error) ?></div>
+                <?php endif; ?>
 
-                <form action="#" method="POST" class="login-form">
+                <?php if ($success !== null): ?>
+                    <div class="auth-message auth-success"><?= h($success) ?></div>
+                <?php endif; ?>
+
+                <form action="login.php" method="POST" class="login-form">
 
                     <div class="input-group">
 
-                        <label for="usuario">
-                            USUÁRIO
+                        <label for="email">
+                            E-MAIL
                         </label>
 
                         <input
-                            type="text"
-                            id="usuario"
-                            name="usuario"
-                            placeholder="Digite seu usuário"
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Digite seu e-mail"
                             autocomplete="username"
+                            value="<?= h($_POST['email'] ?? '') ?>"
                             required>
 
                     </div>
@@ -118,23 +182,9 @@
 
 
                     <div class="login-options">
-
-                        <label class="remember">
-
-                            <input
-                                type="checkbox"
-                                name="lembrar">
-
-                            <span>
-                                Lembrar de mim
-                            </span>
-
-                        </label>
-
-                        <a href="#">
-                            Esqueceu a senha?
+                        <a href="cadastro.php">
+                            Criar uma conta
                         </a>
-
                     </div>
 
 
@@ -143,35 +193,6 @@
                     </button>
 
                 </form>
-
-
-                <div class="login-divider">
-                    <span>OU</span>
-                </div>
-
-
-                <div class="register">
-
-                    <p>
-                        Ainda não possui uma conta?
-                    </p>
-
-                    <a href="#">
-                        CRIAR CONTA
-                    </a>
-
-                </div>
-
-
-                <div class="login-footer">
-
-                    <span>DROP ZONE</span>
-
-                    <small>
-                        STREETWEAR • YOUR STYLE • YOUR DROP
-                    </small>
-
-                </div>
 
             </div>
 

@@ -23,5 +23,8 @@ function getPDO(): PDO
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
 
+    // Mantem compatibilidade com bancos antigos sem a coluna de permissao.
+    $pdo->exec('ALTER TABLE cliente ADD COLUMN IF NOT EXISTS admin TINYINT(1) NOT NULL DEFAULT 0');
+
     return $pdo;
 }

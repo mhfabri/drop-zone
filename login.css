@@ -311,6 +311,26 @@ body.login-page {
     line-height: 1.6;
 }
 
+.auth-message {
+    margin-bottom: 16px;
+    padding: 11px 12px;
+    border: 1px solid;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.auth-error {
+    color: #ffd8d8;
+    border-color: rgba(255, 107, 107, .52);
+    background: rgba(255, 107, 107, .12);
+}
+
+.auth-success {
+    color: #e8ffe0;
+    border-color: rgba(69, 255, 0, .45);
+    background: rgba(69, 255, 0, .10);
+}
+
 /* =========================================================
    CAMPOS
    ========================================================= */
