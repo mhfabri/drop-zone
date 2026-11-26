@@ -16,8 +16,29 @@ function h(?string $value): string
 }
 
 $errors = [];
+$notice = null;
+
+if (isset($_GET['ok'])) {
+  $noticeMap = [
+    '1' => 'Produto inserido com sucesso no banco.',
+    'updated' => 'Estoque atualizado com sucesso.',
+    'deleted' => 'Produto excluido com sucesso.',
+  ];
+
+  $notice = $noticeMap[(string) $_GET['ok']] ?? null;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $action = (string) ($_POST['action'] ?? 'create');
+
+  try {
+    $pdo = getPDO();
+  } catch (Throwable $e) {
+    $errors[] = 'Nao foi possivel conectar ao banco de dados.';
+    $action = '';
+  }
+
+  if ($action === 'create' && !$errors) {
     $nome = trim((string) ($_POST['nome'] ?? ''));
     $preco = trim((string) ($_POST['preco'] ?? ''));
     $categoria = trim((string) ($_POST['categoria'] ?? ''));
@@ -28,54 +49,105 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = (int) ($_POST['status'] ?? 1);
 
     if ($nome === '') {
-        $errors[] = 'Informe o nome do produto.';
+      $errors[] = 'Informe o nome do produto.';
     }
 
     if (!is_numeric($preco) || (float) $preco <= 0) {
-        $errors[] = 'Informe um preco valido.';
+      $errors[] = 'Informe um preco valido.';
     }
 
     if ($categoria !== 'tenis' && $categoria !== 'roupas') {
-        $errors[] = 'Escolha uma categoria valida.';
+      $errors[] = 'Escolha uma categoria valida.';
     }
 
     if (!ctype_digit($estoque) || (int) $estoque < 0) {
-        $errors[] = 'Informe um estoque valido.';
+      $errors[] = 'Informe um estoque valido.';
     }
 
     if ($imagem === '') {
-        $errors[] = 'Informe a URL da imagem.';
+      $errors[] = 'Informe a URL da imagem.';
     }
 
     if ($status !== 0 && $status !== 1) {
-        $errors[] = 'Status invalido.';
+      $errors[] = 'Status invalido.';
     }
 
     if (!$errors) {
-        try {
-            $pdo = getPDO();
+      try {
+        $stmt = $pdo->prepare(
+          'INSERT INTO produto (nome, preco, descricao, tamanho, categoria, estoque, status, imagem)
+           VALUES (:nome, :preco, :descricao, :tamanho, :categoria, :estoque, :status, :imagem)'
+        );
 
-            $stmt = $pdo->prepare(
-                'INSERT INTO produto (nome, preco, descricao, tamanho, categoria, estoque, status, imagem)
-                 VALUES (:nome, :preco, :descricao, :tamanho, :categoria, :estoque, :status, :imagem)'
-            );
+        $stmt->execute([
+          ':nome' => $nome,
+          ':preco' => (float) $preco,
+          ':descricao' => $descricao,
+          ':tamanho' => $tamanho,
+          ':categoria' => $categoria,
+          ':estoque' => (int) $estoque,
+          ':status' => $status,
+          ':imagem' => $imagem,
+        ]);
 
-            $stmt->execute([
-                ':nome' => $nome,
-                ':preco' => (float) $preco,
-                ':descricao' => $descricao,
-                ':tamanho' => $tamanho,
-                ':categoria' => $categoria,
-                ':estoque' => (int) $estoque,
-                ':status' => $status,
-                ':imagem' => $imagem,
-            ]);
+        header('Location: admin_produtos.php?ok=1');
+        exit;
+      } catch (Throwable $e) {
+        $errors[] = 'Nao foi possivel inserir o produto. Verifique a conexao e a estrutura do banco.';
+      }
+    }
+  } elseif ($action === 'update_stock' && !$errors) {
+    $sku = trim((string) ($_POST['sku'] ?? ''));
+    $estoque = trim((string) ($_POST['estoque'] ?? ''));
 
-            header('Location: admin_produtos.php?ok=1');
-            exit;
-        } catch (Throwable $e) {
-            $errors[] = 'Nao foi possivel inserir o produto. Verifique a conexao e a estrutura do banco.';
+    if (!ctype_digit($sku) || (int) $sku <= 0) {
+      $errors[] = 'SKU invalido para atualizar estoque.';
+    }
+
+    if (!ctype_digit($estoque) || (int) $estoque < 0) {
+      $errors[] = 'Informe um estoque valido.';
+    }
+
+    if (!$errors) {
+      try {
+        $stmt = $pdo->prepare('UPDATE produto SET estoque = :estoque WHERE sku = :sku');
+        $stmt->execute([
+          ':estoque' => (int) $estoque,
+          ':sku' => (int) $sku,
+        ]);
+
+        if ($stmt->rowCount() > 0) {
+          header('Location: admin_produtos.php?ok=updated');
+          exit;
         }
+
+        $errors[] = 'Produto nao encontrado para atualizar.';
+      } catch (Throwable $e) {
+        $errors[] = 'Nao foi possivel atualizar o estoque desse produto.';
+      }
+    }
+  } elseif ($action === 'delete' && !$errors) {
+    $sku = trim((string) ($_POST['sku'] ?? ''));
+
+    if (!ctype_digit($sku) || (int) $sku <= 0) {
+      $errors[] = 'SKU invalido para exclusao.';
+    }
+
+    if (!$errors) {
+      try {
+        $stmt = $pdo->prepare('DELETE FROM produto WHERE sku = :sku');
+        $stmt->execute([':sku' => (int) $sku]);
+
+        if ($stmt->rowCount() > 0) {
+          header('Location: admin_produtos.php?ok=deleted');
+          exit;
+        }
+
+        $errors[] = 'Produto nao encontrado para exclusao.';
+      } catch (Throwable $e) {
+        $errors[] = 'Nao foi possivel excluir o produto. Ele pode estar vinculado a compras.';
+      }
+    }
     }
 }
 
@@ -110,8 +182,8 @@ try {
     <section class="card">
       <h2>Inserir produto</h2>
 
-      <?php if (isset($_GET['ok'])): ?>
-        <p class="ok">Produto inserido com sucesso no banco.</p>
+      <?php if ($notice !== null): ?>
+        <p class="ok"><?= h($notice) ?></p>
       <?php endif; ?>
 
       <?php if ($errors): ?>
@@ -123,6 +195,7 @@ try {
       <?php endif; ?>
 
       <form method="post">
+        <input type="hidden" name="action" value="create">
         <div class="grid">
           <label>
             Nome
@@ -193,6 +266,7 @@ try {
               <th>Preco</th>
               <th>Estoque</th>
               <th>Status</th>
+              <th>Acoes</th>
             </tr>
           </thead>
           <tbody>
@@ -202,9 +276,23 @@ try {
                 <td><?= h($product['nome']) ?></td>
                 <td><?= h($product['categoria']) ?></td>
                 <td>R$ <?= number_format((float) $product['preco'], 2, ',', '.') ?></td>
-                <td><?= (int) $product['estoque'] ?></td>
+                <td>
+                  <form method="post" class="inline-form">
+                    <input type="hidden" name="action" value="update_stock">
+                    <input type="hidden" name="sku" value="<?= (int) $product['sku'] ?>">
+                    <input type="number" name="estoque" min="0" value="<?= (int) $product['estoque'] ?>" required>
+                    <button type="submit" class="btn-small">Atualizar</button>
+                  </form>
+                </td>
                 <td class="<?= ((int) $product['status'] === 1) ? 'status-on' : 'status-off' ?>">
                   <?= ((int) $product['status'] === 1) ? 'Ativo' : 'Inativo' ?>
+                </td>
+                <td>
+                  <form method="post" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="sku" value="<?= (int) $product['sku'] ?>">
+                    <button type="submit" class="btn-danger">Excluir</button>
+                  </form>
                 </td>
               </tr>
             <?php endforeach; ?>

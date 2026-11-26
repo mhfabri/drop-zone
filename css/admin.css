@@ -118,6 +118,38 @@
       text-align: left;
       border-bottom: 1px solid var(--line);
       padding: 10px 8px;
+      vertical-align: middle;
+    }
+
+    .inline-form {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .inline-form input[type="number"] {
+      width: 84px;
+      padding: 8px;
+    }
+
+    .btn-small,
+    .btn-danger {
+      margin-top: 0;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .btn-small {
+      background: var(--green);
+      color: #000;
+    }
+
+    .btn-danger {
+      background: rgba(255, 107, 107, 0.18);
+      color: #ffd9d9;
+      border: 1px solid rgba(255, 107, 107, 0.45);
     }
 
     .status-on { color: var(--green); font-weight: 700; }
