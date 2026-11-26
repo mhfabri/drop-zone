@@ -41,10 +41,32 @@ try {
          ORDER BY sku DESC'
     );
 
+    $sizesStmt = $pdo->prepare(
+        'SELECT tamanho, estoque
+         FROM produto_tamanho
+         WHERE fk_produto_sku = :sku
+         ORDER BY tamanho'
+    );
+
     $products = [];
 
     foreach ($stmt as $row) {
         $type = normalizeType((string) $row['categoria']);
+        $sizesStmt->execute([':sku' => (int) $row['sku']]);
+        $sizes = $sizesStmt->fetchAll();
+
+        $sizes = array_values(array_filter(array_map(function (array $size): ?array {
+            $stock = (int) $size['estoque'];
+
+            if ($stock <= 0) {
+                return null;
+            }
+
+            return [
+                'name' => (string) $size['tamanho'],
+                'stock' => $stock,
+            ];
+        }, $sizes)));
 
         $products[] = [
             'id' => (int) $row['sku'],
@@ -55,6 +77,7 @@ try {
             'badge' => '',
             'image' => (string) $row['imagem'],
             'stock' => (int) $row['estoque'],
+            'sizes' => $sizes,
         ];
     }
 

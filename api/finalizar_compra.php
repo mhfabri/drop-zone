@@ -33,24 +33,29 @@ if (!is_array($payload) || !isset($payload['items']) || !is_array($payload['item
 }
 
 $items = [];
+$itemsSize = [];
 
 foreach ($payload['items'] as $item) {
     $id = isset($item['id']) ? (int) $item['id'] : 0;
     $qty = isset($item['qty']) ? (int) $item['qty'] : 0;
+    $size = trim((string) ($item['size'] ?? ''));
 
-    if ($id <= 0 || $qty <= 0) {
+    if ($id <= 0 || $qty <= 0 || $size === '') {
         http_response_code(422);
         echo json_encode([
-            'error' => 'Item de carrinho invalido.',
+            'error' => 'Item de carrinho ou tamanho invalido.',
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
-    if (!isset($items[$id])) {
-        $items[$id] = 0;
+    $key = $id . '|' . $size;
+
+    if (!isset($items[$key])) {
+        $items[$key] = 0;
     }
 
-    $items[$id] += $qty;
+    $items[$key] += $qty;
+    $itemsSize[$key] = $size;
 }
 
 try {
@@ -81,17 +86,33 @@ try {
          FOR UPDATE'
     );
 
+    $selectSizeStmt = $pdo->prepare(
+        'SELECT estoque
+         FROM produto_tamanho
+         WHERE fk_produto_sku = :sku AND tamanho = :tamanho
+         FOR UPDATE'
+    );
+
+    $updateSizeStmt = $pdo->prepare(
+        'UPDATE produto_tamanho
+         SET estoque = estoque - :qty
+         WHERE fk_produto_sku = :sku AND tamanho = :tamanho AND estoque >= :qty_check'
+    );
+
     $snapshot = [];
 
     $insufficient = [];
 
-    foreach ($items as $sku => $qtyRequested) {
+    foreach ($items as $itemKey => $qtyRequested) {
+        [$sku, $size] = array_pad(explode('|', (string) $itemKey, 2), 2, '');
+        $sku = (int) $sku;
+
         $selectStmt->execute([':sku' => $sku]);
         $row = $selectStmt->fetch();
 
         if (!$row) {
             $insufficient[] = [
-                'id' => (int) $sku,
+                'id' => $sku,
                 'name' => 'Produto nao encontrado',
                 'requested' => (int) $qtyRequested,
                 'available' => 0,
@@ -99,20 +120,26 @@ try {
             continue;
         }
 
-        $available = (int) $row['estoque'];
+        $selectSizeStmt->execute([':sku' => $sku, ':tamanho' => $size]);
+        $sizeRow = $selectSizeStmt->fetch();
+
+        $available = (int) ($row['estoque'] ?? 0);
+        $availableSize = $sizeRow ? (int) $sizeRow['estoque'] : 0;
         $isActive = ((int) $row['status']) === 1;
 
-        if (!$isActive || $available < $qtyRequested) {
+        if (!$isActive || $available < $qtyRequested || $availableSize < $qtyRequested) {
             $insufficient[] = [
-                'id' => (int) $row['sku'],
+                'id' => $sku,
                 'name' => (string) $row['nome'],
                 'requested' => (int) $qtyRequested,
-                'available' => max(0, $available),
+                'available' => min(max(0, $available), max(0, $availableSize)),
             ];
             continue;
         }
 
-        $snapshot[(int) $row['sku']] = [
+        $snapshot[$itemKey] = [
+            'sku' => $sku,
+            'size' => $size,
             'preco' => (float) $row['preco'],
             'qty' => (int) $qtyRequested,
         ];
@@ -136,13 +163,16 @@ try {
     );
 
     $insertCompraStmt = $pdo->prepare(
-           'INSERT INTO compra (fk_cliente_id_cliente, nome_cliente, fk_produto_sku, data, valor, quantidade)
-            VALUES (:cliente, :nome_cliente, :sku, :data, :valor, :quantidade)'
+           'INSERT INTO compra (fk_cliente_id_cliente, nome_cliente, fk_produto_sku, tamanho, data, valor, quantidade)
+            VALUES (:cliente, :nome_cliente, :sku, :tamanho, :data, :valor, :quantidade)'
     );
 
     $today = (new DateTimeImmutable('today'))->format('Y-m-d');
 
-    foreach ($items as $sku => $qtyRequested) {
+    foreach ($items as $skuSize => $qtyRequested) {
+        [$sku, $size] = array_pad(explode('|', (string) $skuSize, 2), 2, '');
+        $sku = (int) $sku;
+
         $updateStmt->execute([
             ':sku' => $sku,
             ':qty' => $qtyRequested,
@@ -153,19 +183,31 @@ try {
             throw new RuntimeException('Nao foi possivel atualizar o estoque.');
         }
 
-        if (!isset($snapshot[(int) $sku])) {
+        $updateSizeStmt->execute([
+            ':sku' => $sku,
+            ':tamanho' => $size,
+            ':qty' => $qtyRequested,
+            ':qty_check' => $qtyRequested,
+        ]);
+
+        if ($updateSizeStmt->rowCount() !== 1) {
+            throw new RuntimeException('Nao foi possivel atualizar o estoque do tamanho.');
+        }
+
+        if (!isset($snapshot[(string) $skuSize])) {
             throw new RuntimeException('Snapshot de produto nao encontrado para salvar compra.');
         }
 
-        $valorTotalItem = $snapshot[(int) $sku]['preco'] * $snapshot[(int) $sku]['qty'];
+        $valorTotalItem = $snapshot[(string) $skuSize]['preco'] * $snapshot[(string) $skuSize]['qty'];
 
         $insertCompraStmt->execute([
             ':cliente' => $clienteId,
             ':nome_cliente' => $clienteNome,
-            ':sku' => (int) $sku,
+            ':sku' => $sku,
+            ':tamanho' => $size,
             ':data' => $today,
             ':valor' => $valorTotalItem,
-            ':quantidade' => (int) $qtyRequested,
+            ':quantidade' => $qtyRequested,
         ]);
     }
 

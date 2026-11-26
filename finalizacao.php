@@ -76,7 +76,7 @@ if ($clienteId <= 0) {
           <img src="${item.image}" alt="${item.name}">
           <div>
             <h3>${item.name}</h3>
-            <p>${item.qty}x • ${money(item.price)}</p>
+            <p>${item.qty}x • ${money(item.price)}${item.size ? ` • Tamanho ${item.size}` : ''}</p>
           </div>
           <strong class="price">${money(item.price * item.qty)}</strong>
         </article>
@@ -104,7 +104,8 @@ if ($clienteId <= 0) {
           body: JSON.stringify({
             items: checkoutData.map(item => ({
               id: item.id,
-              qty: item.qty
+              qty: item.qty,
+              size: item.size || ''
             }))
           })
         });

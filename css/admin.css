@@ -1,5 +1,4 @@
-
-    :root {
+:root {
       --bg: #0f1210;
       --card: #181d1a;
       --line: #2a312c;
@@ -152,11 +151,70 @@
       border: 1px solid rgba(255, 107, 107, 0.45);
     }
 
+    .size-manager {
+      display: grid;
+      min-width: 340px;
+      gap: 8px;
+    }
+
+    .size-row,
+    .size-add {
+      display: grid;
+      grid-template-columns: 62px minmax(170px, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .size-row strong {
+      color: var(--green);
+    }
+
+    .size-add {
+      grid-template-columns: 100px 84px auto;
+      margin-top: 2px;
+    }
+
+    .size-add input[type="text"] {
+      width: 100px;
+      padding: 8px;
+    }
+
     .status-on { color: var(--green); font-weight: 700; }
     .status-off { color: var(--danger); font-weight: 700; }
+
+    .btn-status-on,
+    .btn-status-off {
+      width: 100%;
+      min-width: 88px;
+      margin-top: 0;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid;
+      font-size: 12px;
+    }
+
+    .btn-status-on {
+      color: var(--green);
+      background: rgba(69, 255, 0, 0.10);
+      border-color: rgba(69, 255, 0, 0.40);
+    }
+
+    .btn-status-off {
+      color: #ffd9d9;
+      background: rgba(255, 107, 107, 0.10);
+      border-color: rgba(255, 107, 107, 0.40);
+    }
+
+    .btn-status-on:disabled,
+    .btn-status-off:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
 
     @media (max-width: 700px) {
       body { padding: 14px; }
       table { display: block; overflow-x: auto; white-space: nowrap; }
     }
-  

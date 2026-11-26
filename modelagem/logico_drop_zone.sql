@@ -44,10 +44,22 @@ CREATE TABLE IF NOT EXISTS compra (
     data DATE NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
     quantidade INT NOT NULL DEFAULT 1,
+    tamanho VARCHAR(20) NULL,
     CONSTRAINT FK_compra_2 FOREIGN KEY (fk_cliente_id_cliente)
         REFERENCES cliente (id_cliente)
         ON DELETE RESTRICT,
     CONSTRAINT FK_compra_3 FOREIGN KEY (fk_produto_sku)
         REFERENCES produto (sku)
         ON DELETE RESTRICT
+);
+
+CREATE TABLE IF NOT EXISTS produto_tamanho (
+    id_tamanho INT AUTO_INCREMENT PRIMARY KEY,
+    fk_produto_sku INT NOT NULL,
+    tamanho VARCHAR(20) NOT NULL,
+    estoque INT NOT NULL DEFAULT 0,
+    UNIQUE KEY uk_produto_tamanho (fk_produto_sku, tamanho),
+    CONSTRAINT FK_produto_tamanho_produto FOREIGN KEY (fk_produto_sku)
+        REFERENCES produto (sku)
+        ON DELETE CASCADE
 );

@@ -886,6 +886,42 @@ button, input {
 }
 
 
+/* Tamanho do produto */
+.product-size {
+  display: grid;
+  gap: 6px;
+
+  margin: -3px 0 12px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+
+/* Estiliza o seletor de tamanho */
+.product-size select {
+  width: 100%;
+
+  border: 1px solid var(--border);
+
+  border-radius: 6px;
+
+  background: #111411;
+
+  color: #fff;
+
+  padding: 9px 10px;
+
+  font: inherit;
+}
+
+
 /* Linha que contém preço e botão */
 .product-row {
   display: flex;

@@ -67,6 +67,10 @@ async function loadProducts() {
 function productCard(p) {
   const stock = Number(p.stock || 0);
   const canAdd = stock > 0;
+  const sizes = Array.isArray(p.sizes) ? p.sizes : [];
+  const sizeOptions = sizes.map(size =>
+    `<option value="${size.name}" ${size.stock <= 0 ? 'disabled' : ''}>${size.name}</option>`
+  ).join('');
 
   return `
     <article class="product-card">
@@ -99,31 +103,29 @@ function productCard(p) {
 
         <!-- Nome do produto -->
         <h3 class="product-name">${p.name}</h3>
-        <!-- Tamanho do produto -->
-        
-        <div class="product-row">
 
-          <!-- Preço formatado -->
-          <strong class="price">${money(p.price)}</strong>
+        ${sizes.length ? `
+          <label class="product-size">
+            <span>Tamanho</span>
+            <select id="size-${p.id}" aria-label="Escolha o tamanho de ${p.name}">
+              <option value="">Selecione</option>
+              ${sizeOptions}
+            </select>
+          </label>
+        ` : ''}
 
-          <!--
-            Ao clicar nesse botão, chama a função addToCart()
-            passando o ID do produto.
-          -->
-          <button
-            class="add"
-            onclick="addToCart(${p.id})"
-            aria-label="Adicionar ao carrinho"
-            ${canAdd ? "" : "disabled"}
-          >
-            +
-          </button>
-
-        </div>
-
-        <small class="product-stock">
-          ${canAdd ? `Estoque: ${stock}` : "Sem estoque"}
-        </small>
+        <!--
+          Ao clicar nesse botão, chama a função addToCart()
+          passando o ID do produto.
+        -->
+        <button
+          class="add"
+          onclick="addToCart(${p.id})"
+          aria-label="Adicionar ao carrinho"
+          ${canAdd ? "" : "disabled"}
+        >
+          +
+        </button>
 
       </div>
     </article>`;
@@ -193,29 +195,35 @@ function addToCart(id) {
     return showToast("Produto nao encontrado.");
   }
 
-  const stock = Number(item.stock || 0);
+  const sizeSelect = document.querySelector(`#size-${id}`);
+  const size = sizeSelect ? sizeSelect.value : '';
 
-  if (stock <= 0) {
-    return showToast("Produto sem estoque.");
+  if (Array.isArray(item.sizes) && item.sizes.length && !size) {
+    return showToast("Selecione o tamanho antes de adicionar.");
   }
 
-  // Verifica se esse produto já está no carrinho
-  const existing = cart.find(p => p.id === id);
+  const selectedSize = item.sizes?.find(entry => entry.name === size);
+  const stock = selectedSize ? Number(selectedSize.stock || 0) : Number(item.stock || 0);
 
-  // Se já existir, aumenta a quantidade
+  if (stock <= 0) {
+    return showToast("Tamanho sem estoque.");
+  }
+
+  // Verifica se esse SKU com esse tamanho ja esta no carrinho
+  const existing = cart.find(p => p.id === id && (p.size || '') === size);
+
   if (existing) {
     if (existing.qty >= stock) {
-      return showToast("Voce atingiu o limite de estoque desse produto.");
+      return showToast("Voce atingiu o limite de estoque desse tamanho.");
     }
 
     existing.qty++;
   }
 
-  // Caso ainda não esteja no carrinho,
-  // adiciona o produto com quantidade 1.
   else {
     cart.push({
       ...item,
+      size,
       qty: 1
     });
   }
@@ -232,13 +240,8 @@ function addToCart(id) {
 // REMOVER PRODUTO DO CARRINHO
 // ============================================================
 
-function removeFromCart(id) {
-
-  // Cria um novo array contendo apenas os produtos
-  // cujo ID seja diferente do produto removido.
-  cart = cart.filter(p => p.id !== id);
-
-  // Salva o novo carrinho
+function removeFromCart(id, size) {
+  cart = cart.filter(p => !(p.id === id && (p.size || '') === (size || '')));
   saveCart();
 }
 
@@ -325,6 +328,8 @@ function renderCart() {
         <!-- Nome do produto -->
         <h4>${p.name}</h4>
 
+        ${p.size ? `<p>Tamanho: ${p.size}</p>` : ''}
+
         <!-- Quantidade e preço -->
         <p>
           ${p.qty}x • ${money(p.price)}
@@ -335,7 +340,7 @@ function renderCart() {
       <!-- Botão para remover o produto -->
       <button
         class="remove"
-        onclick="removeFromCart(${p.id})"
+        onclick="removeFromCart(${p.id}, '${(p.size || '').replace(/'/g, "\\'")}')"
       >
         ✕
       </button>

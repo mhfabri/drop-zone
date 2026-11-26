@@ -26,6 +26,16 @@ function getPDO(): PDO
     // Mantem compatibilidade com bancos antigos sem a coluna de permissao.
     $pdo->exec('ALTER TABLE cliente ADD COLUMN IF NOT EXISTS admin TINYINT(1) NOT NULL DEFAULT 0');
     $pdo->exec("ALTER TABLE compra ADD COLUMN IF NOT EXISTS nome_cliente VARCHAR(255) NOT NULL DEFAULT '' AFTER fk_cliente_id_cliente");
+    $pdo->exec("ALTER TABLE compra ADD COLUMN IF NOT EXISTS tamanho VARCHAR(20) NULL AFTER fk_produto_sku");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS produto_tamanho (
+        id_tamanho INT AUTO_INCREMENT PRIMARY KEY,
+        fk_produto_sku INT NOT NULL,
+        tamanho VARCHAR(20) NOT NULL,
+        estoque INT NOT NULL DEFAULT 0,
+        UNIQUE KEY uk_produto_tamanho (fk_produto_sku, tamanho),
+        CONSTRAINT FK_produto_tamanho_produto FOREIGN KEY (fk_produto_sku)
+            REFERENCES produto (sku) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
     return $pdo;
 }
