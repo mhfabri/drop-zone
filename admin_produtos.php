@@ -47,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoria = trim((string) ($_POST['categoria'] ?? ''));
     $descricao = trim((string) ($_POST['descricao'] ?? ''));
     $tamanho = trim((string) ($_POST['tamanho'] ?? ''));
-    $estoque = trim((string) ($_POST['estoque'] ?? ''));
+    $estoque = '0';
     $imagem = trim((string) ($_POST['imagem'] ?? ''));
-    $status = (int) ($_POST['status'] ?? 1);
+    $status = 0;
 
     if ($nome === '') {
       $errors[] = 'Informe o nome do produto.';
@@ -61,10 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($categoria !== 'tenis' && $categoria !== 'roupas') {
       $errors[] = 'Escolha uma categoria valida.';
-    }
-
-    if (!ctype_digit($estoque) || (int) $estoque < 0) {
-      $errors[] = 'Informe um estoque valido.';
     }
 
     if ($imagem === '') {
@@ -107,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sizeStmt->execute([
               ':sku' => $sku,
               ':tamanho' => mb_substr($sizeName, 0, 20),
-              ':estoque' => (int) $estoque,
+              ':estoque' => 0,
             ]);
           }
         }
@@ -116,43 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
       } catch (Throwable $e) {
         $errors[] = 'Nao foi possivel inserir o produto. Verifique a conexao e a estrutura do banco.';
-      }
-    }
-  } elseif ($action === 'update_stock' && !$errors) {
-    $sku = trim((string) ($_POST['sku'] ?? ''));
-    $estoque = trim((string) ($_POST['estoque'] ?? ''));
-
-    if (!ctype_digit($sku) || (int) $sku <= 0) {
-      $errors[] = 'SKU invalido para atualizar estoque.';
-    }
-
-    if (!ctype_digit($estoque) || (int) $estoque < 0) {
-      $errors[] = 'Informe um estoque valido.';
-    }
-
-    if (!$errors) {
-      try {
-        $stockValue = (int) $estoque;
-        $stmt = $pdo->prepare(
-          'UPDATE produto
-           SET estoque = :estoque,
-               status = CASE WHEN :estoque_check > 0 THEN status ELSE 0 END
-           WHERE sku = :sku'
-        );
-        $stmt->execute([
-          ':estoque' => $stockValue,
-          ':estoque_check' => $stockValue,
-          ':sku' => (int) $sku,
-        ]);
-
-        if ($stmt->rowCount() > 0) {
-          header('Location: admin_produtos.php?ok=updated');
-          exit;
-        }
-
-        $errors[] = 'Produto nao encontrado para atualizar.';
-      } catch (Throwable $e) {
-        $errors[] = 'Nao foi possivel atualizar o estoque desse produto.';
       }
     }
   } elseif ($action === 'delete' && !$errors) {
@@ -395,19 +354,6 @@ try {
             <input type="text" name="tamanho" value="<?= h($_POST['tamanho'] ?? '') ?>" placeholder="Ex: P, M, G ou 38, 39, 40">
           </label>
 
-          <label>
-            Estoque
-            <input type="number" min="0" name="estoque" required value="<?= h($_POST['estoque'] ?? '0') ?>">
-          </label>
-
-          <label>
-            Status
-            <select name="status" required>
-              <option value="1" <?= (($_POST['status'] ?? '1') === '1') ? 'selected' : '' ?>>Ativo</option>
-              <option value="0" <?= (($_POST['status'] ?? '1') === '0') ? 'selected' : '' ?>>Inativo</option>
-            </select>
-          </label>
-
           <label style="grid-column: 1 / -1;">
             URL da imagem
             <input type="url" name="imagem" required value="<?= h($_POST['imagem'] ?? '') ?>">
@@ -438,7 +384,6 @@ try {
               <th>Nome</th>
               <th>Categoria</th>
               <th>Preco</th>
-              <th>Estoque</th>
               <th>Tamanhos</th>
               <th>Status</th>
               <th>Acoes</th>
@@ -450,16 +395,8 @@ try {
                 <td><?= (int) $product['sku'] ?></td>
                 <td><?= h($product['nome']) ?></td>
                 <td><?= h($product['categoria']) ?></td>
-                <td>R$ <?= number_format((float) $product['preco'], 2, ',', '.') ?></td>
-                <td>
-                  <form method="post" class="inline-form">
-                    <input type="hidden" name="action" value="update_stock">
-                    <input type="hidden" name="sku" value="<?= (int) $product['sku'] ?>">
-                    <input type="number" name="estoque" min="0" value="<?= (int) $product['estoque'] ?>" required>
-                    <button type="submit" class="btn-small">Atualizar</button>
-                  </form>
-                </td>
-                <td>
+                <td data-label="Preco">R$ <?= number_format((float) $product['preco'], 2, ',', '.') ?></td>
+                <td data-label="Tamanhos">
                   <div class="size-manager">
                     <?php foreach (($product['tamanhos'] ?? []) as $size): ?>
                       <div class="size-row">
@@ -501,7 +438,7 @@ try {
                       <?= ((int) $product['status'] === 1) ? 'Desativar' : 'Ativar' ?>
                     </button>
                   </form>
-                  <small><?= ((int) $product['estoque'] <= 0) ? 'Sem estoque' : (((int) $product['status'] === 1) ? 'Ativo' : 'Inativo') ?></small>
+                  <small><?= ((int) $product['estoque'] <= 0 || (int) $product['estoque'] == null) ? 'Sem estoque' : (((int) $product['status'] === 1) ? 'Ativo' : 'Inativo') ?></small>
                 </td>
                 <td>
                   <form method="post" onsubmit="return confirm('Tem certeza que deseja excluir este produto inteiro?');">

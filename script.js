@@ -118,14 +118,19 @@ function productCard(p) {
           Ao clicar nesse botão, chama a função addToCart()
           passando o ID do produto.
         -->
-        <button
-          class="add"
-          onclick="addToCart(${p.id})"
-          aria-label="Adicionar ao carrinho"
-          ${canAdd ? "" : "disabled"}
-        >
-          +
-        </button>
+
+        <div class="product-cart-action">
+          <strong class="price">${money(p.price)}</strong>
+
+          <button
+            class="add"
+            onclick="addToCart(${p.id})"
+            aria-label="Adicionar ao carrinho"
+            ${canAdd ? "" : "disabled"}
+          >
+            +
+          </button>
+        </div>
 
       </div>
     </article>`;

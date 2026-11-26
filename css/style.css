@@ -960,13 +960,18 @@ button, input {
   font-size: 20px;
 }
 
-
-/* Hover do botão "+" */
-.add:hover {
-  background: var(--green);
-  color: #000;
+.product-cart-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
 }
 
+.product-cart-action .price {
+  text-align: center;
+}
 
 /* =========================================================
    BANNER PROMOCIONAL
