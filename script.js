@@ -26,8 +26,7 @@ let cart = JSON.parse(localStorage.getItem("dropzone-cart") || "[]");
 // Função responsável por transformar um número em formato
 // de moeda brasileira.
 //
-// Exemplo:
-// 399.90 → R$ 399,90
+
 const money = value => value.toLocaleString("pt-BR", {
   style: "currency",
   currency: "BRL"
@@ -79,7 +78,6 @@ function productCard(p) {
 
         <!--
           Mostra a badge somente se o produto possuir uma.
-          Exemplo: NOVO, DROP ou BEST.
         -->
         ${p.badge ? `<span class="badge">${p.badge}</span>` : ""}
 
@@ -101,7 +99,8 @@ function productCard(p) {
 
         <!-- Nome do produto -->
         <h3 class="product-name">${p.name}</h3>
-
+        <!-- Tamanho do produto -->
+        
         <div class="product-row">
 
           <!-- Preço formatado -->
@@ -160,9 +159,6 @@ function renderProducts(list = products) {
 
 // Filtra os produtos pelo tipo.
 //
-// Por exemplo:
-// "tenis" → mostra apenas tênis
-// "roupas" → mostra apenas roupas
 //
 // id indica onde os produtos serão exibidos.
 function renderByType(type, id) {
@@ -276,8 +272,6 @@ function renderCart() {
 
   // Calcula a quantidade total de produtos.
   //
-  // Exemplo:
-  // 2 tênis + 3 camisetas = 5 produtos
   const count = cart.reduce(
     (sum, p) => sum + p.qty,
     0
@@ -285,8 +279,6 @@ function renderCart() {
 
   // Calcula o preço total do carrinho.
   //
-  // Exemplo:
-  // R$ 100 × 2 = R$ 200
   const total = cart.reduce(
     (sum, p) => sum + p.price * p.qty,
     0
@@ -573,10 +565,6 @@ document.querySelectorAll(".filter").forEach(button => {
 
     // Pega o valor definido no atributo data-filter
     //
-    // Exemplo:
-    // data-filter="tenis"
-    // data-filter="roupas"
-    // data-filter="todos"
     const filter = button.dataset.filter;
 
 
