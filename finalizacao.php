@@ -1,5 +1,15 @@
 <?php
 declare(strict_types=1);
+
+session_start();
+
+$auth = $_SESSION['auth'] ?? null;
+$clienteId = is_array($auth) ? (int) ($auth['id'] ?? 0) : 0;
+
+if ($clienteId <= 0) {
+  header('Location: login.php');
+  exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

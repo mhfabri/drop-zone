@@ -25,6 +25,7 @@ function getPDO(): PDO
 
     // Mantem compatibilidade com bancos antigos sem a coluna de permissao.
     $pdo->exec('ALTER TABLE cliente ADD COLUMN IF NOT EXISTS admin TINYINT(1) NOT NULL DEFAULT 0');
+    $pdo->exec("ALTER TABLE compra ADD COLUMN IF NOT EXISTS nome_cliente VARCHAR(255) NOT NULL DEFAULT '' AFTER fk_cliente_id_cliente");
 
     return $pdo;
 }
